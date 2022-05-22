@@ -1,0 +1,110 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Turbo Coding</title>
+  <metadata>
+  <md:content-id>m18178</md:content-id><md:title>Turbo Coding</md:title>
+  <md:abstract>This module provides a brief extension of Viterbi convolutional decoders to turbo decoding.</md:abstract>
+  <md:uuid>d01eb103-9ac8-4698-8930-35fd157ad32f</md:uuid>
+</metadata>
+  <content>
+    <section id="id6891520"><title>Turbo encoding and decoding</title>
+
+    <section id="element-209"><title>Introduction</title>
+
+
+<para id="id6881031">A paper was published by Claude Berrou and coauthors at the ICC conference in 1993 that rocked or shook the field of forward error correction coding (FECC). This described a method of creating much more powerful block error correcting coding with only the minimum amount of effort. Its main features were two recursive convolutional encoders (RCE) interconnected via an interleaver. The data is fed into the first encoder directly and into the second encoder after interleaving or reordereing of the input data.</para>
+</section>
+
+
+    <section id="element-141"><title>Turbo encoding</title>
+
+<para id="id6810481">The important features are the use of two recursive convolutional encoders and the design of the interleaver which gives a block code with the block size equal to the interleaver size, <link target-id="id6810478"/>. Random interleavers tend to work better than row and column interleavers. Note that recursive convolutional encoders were known about well before their use in turbo codes, but the difficulties in driving them into a known state made them less popular than the non-recursive convolutional encoders described in the previous module.</para>
+    <para id="id6890605">The name turbo decoder came from the turbo charger in an automobile where the exhaust gasses are used to drive a compressor in a feedback loop to increase the input of fuel and hence the vehicles ultimate performance.</para>
+
+   <figure id="id6810478"><media id="id1172011282541" alt=""><image src="../../media/figp.png" mime-type="image/png"/></media><caption>Turbo encoder with recursive encoding loops</caption></figure>
+
+
+    <para id="element-480">The desired output rate was initially achieved by puncturing (ignoring every second output) from each of the encoders.</para>
+
+</section>
+
+    <section id="element-281"><title>Turbo decoding</title>
+
+
+<para id="id6854920">Turbo decoding is iterative. The decoding is also soft, the values that flow around the whole decoder are real values and not binary representations (with the exception of the hard decisions taken at the end of the number of iterations you are prepared to perform). They are usually log likelihood ratios (LLRs), the log of the probability that a particular bit was a logic 1 divided by the probability the same bit was a logic 0. </para>
+
+
+<para id="id6891442">Decoding is accomplished by first demultiplexing the incoming data stream into d, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>y</m:ci> 
+                   <m:cn>1</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>y</m:ci> 
+                   <m:cn>2</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>. d and <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>y</m:ci> 
+                   <m:cn>1</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math> go into the decoder for the first code, <link target-id="id7894262"/>. This gives an estimate of the extrinsic information from the first decoder which is interleaved and past on to the second decoder. The second decoder thus has three inputs, the extrinsic information from the first decoder, the interleaved data d, and the received values for <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>y</m:ci> 
+                   <m:cn>2</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>. It produces its extrinsic information and this is deinterleaved and passed back to the first encoder. This process is then repeated or iterated as required until the final solution is obtained from the second decoder interleaver.</para>
+ 
+   <figure id="id7894262"><media id="id1172011873917" alt=""><image src="../../media/figq.png" mime-type="image/png"/></media><caption>Turbo decoder</caption></figure>
+
+
+    <para id="id6882337">The decoders themselves generally use soft output Viterbi algorithm (SOVA) to decode the received data. However the preferred turbo decoding method is to use the maximum a-priori (MAP) algorithm but this is too mathematical to discuss here!</para>
+
+    <figure id="id8252600"><media id="id1172025462668" alt=""><image src="../../media/figr.png" mime-type="image/png"/></media><caption>Probability of error for turbo decoders with variable number of iterations</caption></figure>
+</section>
+
+    <section id="element-324"><title>Coder performance</title>
+
+
+<para id="id7894857"><link target-id="id8252600"/> shows these ½ rate decoders operating at much lower <m:math>
+<m:apply><m:divide/> 
+    
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>E</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>N</m:ci> 
+                   <m:cn>0</m:cn> 
+                </m:msub> 
+              </m:ci> 
+
+   </m:apply> 
+        </m:math>
+
+ or SNR values than the convolutional Viterbi decoders of the previous section and, further, as the number of iterations increases to beyond 15, then the performance comes very very close to the theoretical Shannon bound.</para>
+
+    <para id="element-739">This is the attraction that has excited the FECC community, who were unable to achieve this low error rate before 1993! Now that iterative decoding has been introduced for turbo decoders it is also being re-applied in low delay parity check (LDPC) decoders with equal enthusiasm and success.</para><figure id="element-614"><media id="id1172008254892" alt=""><image src="../../media/figs.png" mime-type="image/png"/></media></figure>
+
+
+<para id="id7115911"><link target-id="element-614"/> includes a turbo decoding example (which as an animated power point slide) will show the black dot noise induced errors being corrected on each subsequent iteration with the black dots being progressively reduced in the upper cartoon. </para>
+</section>
+</section>
+
+
+<note id="id1172016412764">This module has been created from lecture notes originated by P M Grant and D G M Cruickshank which are published in I A Glover and P M Grant, "Digital Communications", Pearson Education, 2009, ISBN 978-0-273-71830-7.  Powerpoint slides plus end of chapter problem examples/solutions are available for instructor use via password access at http://www.see.ed.ac.uk/~pmg/DIGICOMMS/</note>
+
+  </content>
+</document>

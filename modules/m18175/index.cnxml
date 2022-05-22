@@ -1,0 +1,260 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Block code performance</title>
+  <metadata>
+  <md:content-id>m18175</md:content-id><md:title>Block code performance</md:title>
+  <md:abstract>This module explores with nearest neighbour decoding the limits or bounds on error correcting performance of the (n,k) block coder.</md:abstract>
+  <md:uuid>6c969450-cbb1-42d7-b1f3-552d1968cdba</md:uuid>
+</metadata>
+  <content>
+    <section id="id6982138">
+      <title>Block code error correction capability</title>
+      <section id="id7469271">
+        <title>Hamming distance</title>
+        <para id="id7590421">Consider two distinct five digit codewords C1 = 00000 and C2 = 00011. These have a binary digit difference (or Hamming distance) of 2 in the last two digits. The minimum distance in binary digits between any two codewords is known as the minimum Hamming distance,  <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>D</m:ci> 
+                   <m:ci>min</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+</para>
+        <para id="id7837423">For block codes the minimum Hamming distance or the smallest difference between the digits for any two codewords in the complete code set,  <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>D</m:ci> 
+                   <m:ci>min</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+, is the property which controls the error correction performance. We can thus calculate the error detecting and correcting power of a code from the minimum distance in bits between the codewords.</para>
+        <para id="id7612641">Thus for a code with a minimum distance  <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>D</m:ci> 
+                   <m:ci>min</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ = 3 then this code can be used to correct:</para>
+
+        <figure id="id7576664"><media id="id1166659291047" alt=""><image src="../../media/fig0.png" mime-type="image/png"/></media><caption>Relationship between Dmin and error detection OR correction capability (but not both simultaneously)</caption></figure>
+
+
+        <para id="id7576669">Note in the earlier example of two five digit codewords C1 = 00000 and C2 = 00011 which had a Hamming distance of 2 there is only one codeword (e.g. A = 00001 or B = 00010) which lies inbetween these two codewords. Now if there was an error result (e.g. A = 00001) we cannot tell whether it came from C1 or C2 so we can thus only used this to detect that an error has occurred. </para>
+        <para id="id7406421">If the two five digit codewords had been C1 = 00000 and C2 = 00111, which have a Hamming distance of 3, there are then two words which lie inbetween these codewords (e.g. A = 00001 and B = 00011) and these can thus be used EITHER to detect two errors without any correction capability OR if detection is not required they can used to correct a single error (e.g. C1 = 00000 distorted into A = 00001 or C2 = 00111 distorted into B = 00011), <link target-id="id7576664"/>. </para>
+        <para id="id7590012">When performing the correction operation we require to insert the decision boundary as shown in Example 1 below. If in this example we had wished to perform detection only as shown in the lower part of <link target-id="id7576664"/> then we would ignore whether the received code A = 00001 resulted from a single error from a C1 transmission or a double error from a C2 code transmission and only identify it as a detected error.</para>
+        <para id="id6657772">Example 1 – error correction</para>
+        <para id="id8113730">C1 = 00000 </para>
+        <para id="id6793183">A = 00001</para>
+        <para id="id8014327">--------------- </para>
+        <para id="id8014332">B = 00011</para>
+        <para id="id6359679">C2 = 00111</para>
+        <para id="id6936714">This explains further the detailed operation of the equations in <link target-id="id7576664"/> where detection only operation does not require the decision boundary to aid identification of the origination of the error.</para>
+      </section>
+      <section id="element-258"><title>Block error probability and correction capability</title>
+<para id="element-154">If we have an error correcting code which can correct R’ errors, than the probability of a codeword not being correctable is the probability of having more than R’ errors in n digits.  The probability of having more than R’ errors is given in <link target-id="element-725"/>.  We can this calculate this probability by summing all the induvidual error probabilities up to and including R' errors in the block.</para>
+
+<figure id="element-725"><media id="id1166659291296" alt=""><image src="../../media/figx.png" mime-type="image/png"/></media><caption>Correction of more than R' errors in an n digit block</caption></figure>
+
+<para id="element-530">The probability of j errors occurring in an n digit codeword is given in <link target-id="element-524"/>.
+<m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>e</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ is the probability of error in a single binary digit and n is the block length.  <link target-id="element-524"/> also shows how to calculate the nCj term representing all the possible number of ways or error positions that j errors can occur within a block of length n binary digits. </para>
+
+<figure id="element-524"><media id="id1166659291347" alt=""><image src="../../media/figy.png" mime-type="image/png"/></media><caption>Probability of j errors occurring an an n-digit codeword</caption></figure>
+
+<para id="element-778">Example 2:  If we have an error correcting code which can correct 3 errors within a block length n of 10, what is the probability that the code cannot correct a received block if the per digit error probability is <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>e</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ = 0.01?
+
+</para><para id="element-313">Solution:  The code cannot correct the received block if there are more than 3 errors.  Thus:</para>
+
+<para id="element-20">P &gt; 3 errors = 1 - P(0 errors) - P(1 error) - P(2 errors) - P(3 errors). </para><para id="element-337"><link target-id="element-182"/> shows the component parts of this calculation.</para><figure id="element-182"><media id="id1166659291413" alt=""><image src="../../media/figz.png" mime-type="image/png"/></media><caption>Calculation of zero, 1, 2 and 3 errors in a 10-digit codeword with a per-digit <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>e</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math> of 0.01
+</caption></figure>
+
+<para id="element-185">Thus the probability that the code cannot correct a received block is then:
+</para><para id="element-872">1 - 0.9043821 - 0.0913517 - 0.0041523 - 0.0001118 = 0.0000021.
+</para><para id="element-399">This illustrates that the very low overall error remaining after correction of three errors is much less than the original probability of error in a single bit, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>e</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ = 0.01.
+Note also the need for high precision arithmetic (it may be an eight digit calculator is not good enough to calculate the answer to more than 1 significant figure).
+Note also in <link target-id="element-182"/> the much lower probability of t + 1 errors occuring, compared to t errors, as is implied in FECC.
+</para>
+
+
+
+     </section>
+
+
+
+
+        <section id="id7832014">
+        <title>Group codes</title>
+        <para id="id6658602">Group codes are a special kind of block codes. They comprise a set of codewords, C1 … CN, which contain the all zeros codeword (e.g. 00000) and exhibit a special property called closure. This property means that if any two valid codewords are subject to a bit wise EX – OR operation then they will produce another valid codeword in the set. </para>
+        <para id="id7267938">The closure property means that to find the minimum Hamming distance, see below, all that is required is to compare all the remaining codewords in the set with the all zeros codeword instead of comparing all the possible pairs of codewords. </para>
+        <para id="id7489891">The saving gets bigger the longer the codeword. For example a code set with 100 codewords will require 100 comparisons for a Group code design, compared with 100+99+98+…+2+1, for a non-group code!</para>
+        <para id="id8032634">In Group codes the  <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>D</m:ci> 
+                   <m:ci>min</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ calculation is further simplified into calculating the minimum codeword weight or minimum number of 1 digits in a codeword in the set. </para>
+      </section>
+      <section id="id6608438">
+        <title>Nearest neighbour decoding</title>
+        <para id="id6659293">Nearest neighbour decoding assumes that the codeword nearest in Hamming distance to the received word is what was transmitted, as shown in Example 1 above. This inherently contains the assumption that the probability of a small number of t errors is greater than the probability of the larger number of t+1 errors, i.e that <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>e</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ is small.</para>
+        <para id="id4673911">A nearest neighbour decoding table for a (n, k) = (5, 2) i.e. a 5-digit group code is shown in <link target-id="id7589337"/>. Recall that for an n = 5 bit codeword there are <m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>2</m:cn> 
+                   <m:cn>5</m:cn> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>
+ = 32 unique patterns generated by all the possible combinations of the 5 digits.</para>
+
+        <figure id="id7589337"><media id="id1166659308987" alt=""><image src="../../media/fig1-1810.png" mime-type="image/png"/></media><caption>Nearest neighbour decoding table for 5 bit code with 4 codewords implying 2 information bits</caption></figure>
+
+
+        <para id="id7581889"><link target-id="id7589337"/> starts by forming a table with the 4 codewords across the top row. All the single error patterns, which each only differ by one bit from each of the transmitted codewords, can be readily and uniquely assigned back to an error free codeword. Thus the next 5 rows represent these single errors in position 1 through 5 in each of the 4 codewords. Now we have a table up to this point with a total of 4 x 6 = 24 unique entries. Therefore this code is capable of correcting all these single errors.</para>
+        <para id="id7613736">There are also eight remaining codes or table entries as 32 - 24 = 8 and these represent double error patterns which, as can be seen, lie an equal Hamming distance from at least 2 of the initial 4 codewords in the top row. Note for example errors in the first two digits of the 00000 codeword result in us receiving 11000.  However data bit pattern is identified here in <link target-id="id7589337"/> as a single error from codeword 11100 as we assume that 1 error is a much more likely occurence than two errors!</para>
+        <para id="id7323629">These represent some of the double error patterns, which can thus be detected here, but they cannnot be corrected as all the possible double error patterns do not have a unique representation in <link target-id="id7589337"/>.</para>
+</section>
+        <section id="element-612"><title>Soft decision decoding</title>
+<para id="id7323633">Nearest neighbour decoding can also be done on a soft decision basis, with real non-binary numbers from the receiver. The nearest Euclidean distance (nearest to these 5 codewords in terms of a 5-D geometry) is then used and this gives a considerable performance increase over the hard decision decoding described here.</para>
+      </section>
+      <section id="id7428584">
+        <title>Hamming bound</title>
+        <para id="id7614457">This defines mathematically the error correcting performance of a block coder. The upper bound on the performance of block codes is given by the Hamming bound, some times called the sphere packing bound. If we are trying to create a code to correct t errors with a block length of n with k information digits, then <link target-id="id7583334"/> shows the Hamming bound equation.</para>
+
+        <figure id="id7583334"><media id="id1166659299966" alt=""><image src="../../media/fig2-812f.png" mime-type="image/png"/></media><caption>Hamming bound calculation for (n, k) block code to establish number of terms which can be included in the denominator and hence arrive at the codes error correcting power t</caption></figure>
+
+
+        <para id="element-227">Here the denominator terms, which are represented by the binomial coefficients, represent the number of possible patterns or positions in which 1, 2, ..., t errors can occur in an n-bit codeword.</para>
+
+<para id="id8045994">Note the relationship between the decoding table in <link target-id="id7589337"/> and the Hamming Bound equation in <link target-id="id7583334"/>. The <m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>2</m:cn> 
+                   <m:ci>k</m:ci> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>
+ = 4 left hand entry represents the number of transmitted codewords or columns in the table. The numerator <m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>2</m:cn> 
+                   <m:ci>n</m:ci> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>
+ = 32 represents the total possible number of unique entries in the table. The demoninator represents the number of rows which can be accommodated within the table. Here the first denominator term (1) represents the first row (i.e. the transmitted codewords) and the second term (n) the 5 single error patterns. Subsequent terms then represent all the possible double, triple error patterns, etc. The denominator has to be sized or restricted to t to ensure the inequality and this gives or defines the error correction capability as t.</para>
+        <para id="id6659757">If the equation in <link target-id="id7583334"/> is satisfied then the design of suck an (n, k) code is possible with the error correcting power of t. If the equation is not satisfied, then we must be less ambitious by reducing t or k (for the same block length n) or increasing n (while maintaining t and k).</para>
+        <para id="id6410948">Example 2</para>
+        <para id="id7593858">Comment on the ability of a (5, 2) code to correct 1 error and the possibility of a (5, 2) code to correct 2 errors?</para>
+        <para id="id7578397">Solution </para>
+        <para id="id7473624">For single error: k = 2, n = 5 and t = 1, leads to the case summarized in <link target-id="id7205541"/>.</para>
+
+        <figure id="id7205541"><media id="id1166659319117" alt=""><image src="../../media/fig3-b92c.png" mime-type="image/png"/></media><caption>Calculation to assess whether (5, 2) block code can correct t = 1 error - Answer yes</caption></figure>
+
+
+        <para id="id6626407">which is true so such a code design is possible. </para>
+        <para id="id7202141">However if we try to design a (5, 2) code to correct 2 errors we have k = 2, n = 5 and t = 2, which is summarized in <link target-id="id7173222"/>.</para>
+
+        <figure id="id7173222"><media id="id1166659319172" alt=""><image src="../../media/fig4-4ff7.png" mime-type="image/png"/></media><caption>Calculation to assess whether (5, 2) block code can correct t = 2 errors - Answer no</caption></figure>
+
+
+        <para id="id7538489">This result is false or cannot be satisfied and thus this short code cannot be designed with a t = 2 error correcting power or capability. </para>
+        <para id="id6651957">This provides further mathematical derivation for the error correcting performance limits of the nearest neighbour decoding table shown previously in <link target-id="id7589337"/> where we could correct all single error patterns but we could not correct all the possible double error patterns. </para>
+        <para id="id7428537">A full decoding table is not required to be created as, through checking the Hamming bound, one can identify the required block size and number of parity check bits which are required for a given error correction capability in a block or group coder design.</para>
+
+
+   <para id="id3676127"><link target-id="id3665873"/> shows the performance of various BLOCK codes, all of rate ½, whose performance progressively improves as the block length increases from 7 to 511, even for the same coding rate of ½.</para>
+    <para id="id3680504">The power of these forward error correcting codes (FECC) is quantified as the coding gain, i.e. the reduction in the required <m:math>
+<m:apply><m:divide/> 
+    
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>E</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>N</m:ci> 
+                   <m:cn>0</m:cn> 
+                </m:msub> 
+              </m:ci> 
+
+   </m:apply> 
+        </m:math>
+ ratio or energy required to transmit each bit divided by the spectral noise density, for a given bit error ratio or error probability. </para>
+    <para id="id3663216">For example in <link target-id="id3665873"/> the (31, 16) code has a coding gain over the uncoded case of around 1.8 dB at a <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ of <m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>10</m:cn> 
+                   <m:cn>-5</m:cn> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>
+.</para>
+
+    <figure id="id3665873"><media id="id1166659319358" alt=""><image src="../../media/fig6-2c4c.png" mime-type="image/png"/></media><caption>Error performance of 1/2 rate block coders with differing block lengths</caption></figure>
+
+
+
+
+
+
+
+
+<note id="id1166659319374">This module has been created from lecture notes originated by P M Grant and D G M Cruickshank which are published in I A Glover and P M Grant, "Digital Communications", Pearson Education, 2009, ISBN 978-0-273-71830-7.  Powerpoint slides plus end of chapter problem examples/solutions are available for instructor use via password access at http://www.see.ed.ac.uk/~pmg/DIGICOMMS/</note>
+      </section>
+    </section>
+  </content>
+</document>

@@ -1,0 +1,83 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Viterbi Decoder</title>
+  <metadata>
+  <md:content-id>m18177</md:content-id><md:title>Viterbi Decoder</md:title>
+  <md:abstract>Explains in simple terms the functions of a convolutional encoder and Viterbi decoder</md:abstract>
+  <md:uuid>2cb05f27-efab-4155-a063-d2fe62979d68</md:uuid>
+</metadata>
+  <content>
+    <section id="id3775328">
+<title>Viterbi convolutional decoder</title>
+    <para id="id3785232">A convolutional code is not decoded in short blocks as in a block code. However, to simplify decoding, messages are artificially broken down into very long blocks by periodically flushing the encoder with a string of zeros, as in the example discussed here. </para>
+    <para id="id3961573">For illustration only this example here uses an unrealistically short block length of 5 data bits with the last two fixed at 0 to flush the encoder (remember that this is very inefficient and, in practice, practical block lengths are very much longer, typically 1,000 to 10,000 bits in length).</para>
+    <para id="id3712393">Convolutional codes are always decoded using the Viterbi algorithm as this simplifies the decoding operation. The algorithm is based on the nearest neighbour decoding scheme and, like the other algorithms we have looked at, it relies on the assumption that the probability of t errors is much greater than the probability of t+1 errors and it thus selects or chooses and retains only the paths which have fewer errors.</para>
+    <para id="id3746894">The decoding process is based on the previous decoding trellis. We will use the previous ½ rate encoder example and assume that the received message is: 10 10 00 10 10, representing a total of five (unknown) transmitted data bits each encoded into five bit pairs, i.e. total of ten encoded data bits. We further assume in this simplified example that the last 2 bits of the 5 data inputs were flushing zeros to reset the encoder and decoder. </para>
+    <para id="id3706474">Starting (after flushing) with the first received bit in position A in the encoder, we know that if a 1 had been input, (lower path) from the encoder figure the output should have been 11 as we moved to state C. If a 0 was input (upper path) we should have received 00 and moved to state B, see upper part of <link target-id="id3705816"/>.</para>
+    <para id="id3698414">What was actually received was 10, a Hamming distance of 1 from both these possibilities, so we draw that in the lower part of <link target-id="id3705816"/> onto the first stage of our decoding trellis.</para>
+
+    <figure id="id3705816"><media id="id4229839" alt=""><image src="../../media/figa-d48a.png" mime-type="image/png"/></media><caption>First stage of trellis after decoding first two received data bits</caption></figure>
+
+    <para id="id3705820">Instead of reporting the expected outputs we next annotate the lower part of <link target-id="id3705816"/> with the separate distances between the received data and the trellis encoder on each path. We then add the cumulative Hamming distance to the states (B, C) in square brackets above the states B and C</para>
+    <para id="id3698015">Now consider the second pair of received data bits. Consider first state B. As before, we should have received 00 for a 0 input and 11 for a 1 input, see left hand side of <link target-id="id3696191"/>. What we actually received was 10, which is a Hamming distance of 1 from both possibilities so the right hand part of <link target-id="id3696191"/> is annotated with the individual and cumulative distances to states D and E.</para>
+    <para id="id3696926">Then consider state C. For a 0 input, (upper part) we should have received 01, but what was actually received was 10, a Hamming distance of 2. For a 1 input (lower path) we should have received 10 and this is exactly what was received, corresponding to a Hamming distance of 0! Again the right part of <link target-id="id3696191"/> is annotated with the individual distances on the paths and the new cumulative or summed distances to states F and G.</para>
+
+    <figure id="id3696191"><media id="id1165197615143" alt=""><image src="../../media/figb-51d0.png" mime-type="image/png"/></media><caption>First and second stage of the decoding trellis after receiving second pair of data bits</caption></figure>
+
+    <para id="element-740">We continue to build our decoding trellis until it is complete after receipt of all ten data bits, as shown in <link target-id="id3684119"/>.</para>
+
+<para id="id3694860">If we have two paths to a state, as in the later states: H, I , J, K, L, M, N, P, we write the smaller (more likely) Hamming distance in square brackets above the state and discard the larger distance (as this is much less likely to represent the correct path). In our example, we assumed the last two bits were 0, so we must expect to finish back in state P, which is the same as the starting state A. </para>
+    <para id="id3685231">We finally need to find the path from state A to P which gives the lowest overall Hamming distance. We then retrace the path and remember that the upper path from a state represented a 0 transmitted and the lower path represented a 1 transmitted.</para>
+
+    <figure id="id3684119"><media id="id2930319" alt=""><image src="../../media/figc-f5a1.png" mime-type="image/png"/></media><caption>Full decoding trellis after receipt of all ten data bits</caption></figure>
+
+    <para id="id3684142">The reverse decoded data for this example is indicated by the dashed line in <link target-id="id3684119"/>.</para>
+    <para id="id3683171">Leaving states A, C, G and K always in the lower of the two possible paths implies that a data bit 1 has been received at these states and therefore this translates to 1, 1, 1 as the first three encoded data bits. </para>
+    <para id="id3683184">The last two bits don’t matter in this case as we have assumed they are 0, 0 and we can remove from the docoding trellis all the states that don’t support or contribute to this solution.</para>
+    <para id="id3682293">Note that finishing a block with n-1 zero input data bits is not compulsory. If you make a decision after a delay of approximately five times the constraint length n, this makes little difference in code performance but does limit the memory consumed by the process to a more sensible amount.</para>
+    <para id="id3676127"><link target-id="id3665873"/> shows the performance of various BLOCK codes, all of rate ½, whose performance improves as the block length increases, even for the same coding rate of ½.</para>
+    <para id="id3680504">The power of these forward error correcting codes (FECC) is quantified as the coding gain, i.e. the reduction in the required <m:math>
+<m:apply><m:divide/> 
+    
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>E</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>N</m:ci> 
+                   <m:cn>0</m:cn> 
+                </m:msub> 
+              </m:ci> 
+
+   </m:apply> 
+        </m:math> ratio or energy required to transmit each bit divided by the spectral noise density, for a given bit error ratio or error probability. </para>
+    <para id="id3663216">For example in <link target-id="id3665873"/> the (31, 16) code has a coding gain over the uncoded case of around 1.8 dB at a <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ of <m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>10</m:cn> 
+                   <m:cn>-5</m:cn> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>
+.</para>
+
+    <figure id="id3665873"><media id="id1165204343838" alt=""><image src="../../media/figd-2c4c.png" mime-type="image/png"/></media><caption>Error performance of 1/2 rate block coders with differing block lengths</caption></figure>
+
+    <para id="id3665877"><link target-id="id3263109"/> shows for comparison with the block codes of <link target-id="id3665873"/> the performance of convolutional coders. The convolutional code initially provides very good performance at modest constraint length. A short constraint length of n = v = 3 is already superior to the 511 block length code of <link target-id="id3665873"/>. The additional attraction of the convolutional coder is its further improvement with the increase in constraint length up to n = 7 or 9, as shown in <link target-id="id3263109"/>.</para>
+    <para id="id3263130">Unfortunately the coding and decoding process gets more complicated with larger block/constraint length. As shown here convolutional codes with Viterbi decoding are generally more powerful than block codes, especially for very low error rates, hence their wider use. Single chip constraint length 9 (512 state) encoder and decoders are now widely available as commercial products from many semiconductor vendors.</para>
+
+    <figure id="id3263109"><media id="id8218690" alt=""><image src="../../media/fige-492e.png" mime-type="image/png"/></media><caption>Error rate performance of convolutional decoders with differing constraint lengths</caption></figure><note id="id1165200622409" type="warning">This module has been created from lecture notes originated by P M Grant and D G M Cruickshank which are published in I A Glover and P M Grant, "Digital Communications", Pearson Education, 2009, ISBN 978-0-273-71830-7.  Powerpoint slides plus end of chapter problem examples/solutions are available for instructor use via password access at http://www.see.ed.ac.uk/~pmg/DIGICOMMS/</note>
+
+</section>
+  </content>
+</document>

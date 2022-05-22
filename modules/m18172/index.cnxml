@@ -1,0 +1,206 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Huffman source coder</title>
+  <metadata>
+  <md:content-id>m18172</md:content-id><md:title>Huffman source coder</md:title>
+  <md:abstract>This example shows how a Huffman coder allocates variable length codewords to the transmitted symbols depending on their probability of occurence.</md:abstract>
+  <md:uuid>20bcede7-2ba0-45d1-9d27-a1e427214f00</md:uuid>
+</metadata>
+  <content>
+    <section id="id4317022">
+      <title>Source coding</title>
+      <para id="id4317027">Huffman coding deploys variable length coding and then allocates the longer codewords to less frequently occurring symbols and shorter codewords to more regularly occurring symbols. By using this technique it can minimize the overall transmission rate as the regularly occurring symbols are allocated the shorter codewords.</para>
+      <section id="id4349639">
+        <title>Simple source coding</title>
+
+        
+
+        <table id="element-410" summary="">
+<tgroup cols="2"><tbody>
+  <row>
+    <entry>Symbol</entry>
+    <entry>Probability</entry>
+  </row>
+  <row>
+    <entry>A</entry>
+    <entry>0.10</entry>
+  </row>
+  <row>
+    <entry>B</entry>
+    <entry>0.18</entry>
+  </row>
+  <row>
+    <entry>C</entry>
+    <entry>0.40</entry>
+  </row>
+  <row>
+    <entry>D</entry>
+    <entry>0.05</entry>
+  </row>
+  <row>
+    <entry>E</entry>
+    <entry>0.06</entry>
+  </row>
+  <row>
+    <entry>F</entry>
+    <entry>0.10</entry>
+  </row>
+  <row>
+    <entry>G</entry>
+    <entry>0.07</entry>
+  </row>
+  <row>
+    <entry>H</entry>
+    <entry>0.04</entry>
+  </row>
+</tbody>
+
+
+</tgroup>
+<caption>8-symbol signal to be encoded</caption>
+</table><para id="id4406115">We have to start with knowledge of the probabilities of occurrence of all the symbols in the alphabet. The table above shows an example of an 8-symbol alphabet, A…H, with the associated probabilities for each of the eight individual symbols.</para>
+
+        <figure id="id4364104"><media id="id6490786" alt=""><image src="../../media/fig3-6e93.png" mime-type="image/png"/></media><caption>Source encoder entropy calculation</caption></figure>
+
+        
+
+        <para id="element-472"><link target-id="id4364104"/> shows that the entropy of this source data is 2.5524 bits/symbol.</para><table id="element-6" summary="">
+<tgroup cols="2"><tbody>
+  <row>
+    <entry>Symbol</entry>
+    <entry>Code</entry>
+  </row>
+  <row>
+    <entry>A</entry>
+    <entry>000</entry>
+  </row>
+  <row>
+    <entry>B</entry>
+    <entry>001</entry>
+  </row>
+  <row>
+    <entry>C</entry>
+    <entry>010</entry>
+  </row>
+  <row>
+    <entry>D</entry>
+    <entry>011</entry>
+  </row>
+  <row>
+    <entry>E</entry>
+    <entry>100</entry>
+  </row>
+  <row>
+    <entry>F</entry>
+    <entry>101</entry>
+  </row>
+  <row>
+    <entry>G</entry>
+    <entry>110</entry>
+  </row>
+  <row>
+    <entry>H</entry>
+    <entry>111</entry>
+  </row>
+</tbody>
+</tgroup>
+<caption>Simple fixed length (3-bit) encoder</caption>
+</table>
+
+<para id="id4285734">This shows the application of very simple coding where, as there are 8 symbols, we adopt a 3-bit code.  
+
+<link target-id="id4364104"/> shows that the entropy of such a source is 2.5524 bit/symbol and, with the fixed 3 bit/symbol length allocated codewords, the efficiency of this simple coder would be only 2.5524/3.0 = 85.08%, which is a rather poor result.</para>
+
+
+      </section>
+      <section id="id4364110">
+        <title>Huffman coding</title>
+        <para id="id4413587">This is a variable length coding technique which involves two processes, reduction and splitting.</para>
+        <section id="id4413591">
+          <title>Reduction </title>
+          <para id="id4446895">We start by listing the symbols in descending order of probability, with the most probable symbol, C, at the top and the least probable symbol, H, at the foot, see left hand side of <link target-id="id4339300"/>. Next we reduce the two least probable symbols into a single symbol which has the combined probability of these two symbols summed together.  Thus symbols H and D are combined into a single (i.e. reduced) symbol with probability 0.04 + 0.05 = 0.09.</para>
+          <para id="id4393780">Now the symbols have to be reordered again in descending order of probability. As the probability of the new H+D combined symbol (0.09) is no longer the smallest value it then moves up the reordered list as shown in the second left column in <link target-id="id4339300"/>. </para>
+          <para id="id4339294">This process is progressively repeated as shown in <link target-id="id4339300"/> until all symbols are combined into a single symbol whose probability must equal 1.00.</para>
+
+          <figure id="id4339300"><media id="id5396708" alt=""><image src="../../media/fig4-dc3f.png" mime-type="image/png"/></media><caption>Huffman coder reduction process</caption></figure>
+
+        </section>
+        <section id="id4280191">
+          <title>Splitting </title>
+          <para id="id4291704">The variable length codewords for each transmitted symbol are now derived by working backwards (from the right) through the tree structure created in <link target-id="id4339300"/>, by assigning a 0 to the upper branch of each combining operation and a 1 to the lower branch. </para>
+          <para id="id4291714">The final “combined symbol” of probability 1.00 is thus split into two parts of probability 0.60 with assigned digit of 0 and another part with probability 0.40 with assigned digit of 1. This latter part with probability 0.40 and assigned digit of 1 actually represents symbol C, <link target-id="id4363468"/>. </para>
+          <para id="id4281864">The “combined symbol” with probability 0.60 (and allocated first digit of 0) is now split into two further parts with probability 0.37 with an additional or second assigned digit of 0 (i.e. its code is now 00) and another part with the remaining probability 0.23 where the additional assigned digit is 1 and associated code will now be 01.</para>
+
+          <figure id="id4363468"><media id="id5396806" alt=""><image src="../../media/fig5.png" mime-type="image/png"/></media><caption>Huffman coder splitting process to generate the variable length codewords and allocate these depending on symbol probabilities.</caption></figure>
+
+          <para id="id4281870">This process is repeated by adding each new digit after the splitting operation to the right of the previous one.  Note how this allocates short codes to the more probable symbols and longer codes to the less probable symbols, which are transmitted less often.</para><table id="element-491" summary="">
+<tgroup cols="2"><tbody>
+  <row>
+    <entry>Symbol</entry>
+    <entry>Code</entry>
+  </row>
+  <row>
+    <entry>A</entry>
+    <entry>011</entry>
+  </row>
+  <row>
+    <entry>B</entry>
+    <entry>001</entry>
+  </row>
+  <row>
+    <entry>C</entry>
+    <entry>1</entry>
+  </row>
+  <row>
+    <entry>D</entry>
+    <entry>00010</entry>
+  </row>
+  <row>
+    <entry>E</entry>
+    <entry>0101</entry>
+  </row>
+  <row>
+    <entry>F</entry>
+    <entry>0000</entry>
+  </row>
+  <row>
+    <entry>G</entry>
+    <entry>0100</entry>
+  </row>
+  <row>
+    <entry>H</entry>
+    <entry>00011</entry>
+  </row>
+</tbody>
+
+
+
+
+</tgroup>
+<caption>Huffmann coded variable length symbols</caption>
+</table>
+        </section>
+
+      </section>
+        <section id="id4428888"><title>Code efficiency</title>
+          
+<para id="id4428894"><link target-id="id4363468"/> summarises the codewords now allocated to each of the transmitted symbols A…H and also calculates the average length of this source coder as 2.61 bits/symbol.  Note the considerable reduction from the fixed length of 3 in the simple 3-bit coder in earlier table.</para>
+
+          <figure id="id4428898"><media id="id3832355" alt=""><image src="../../media/fig6-5ab3.png" mime-type="image/png"/></media><caption>Summary of allocated codewords for each symbol, A ...H, and calculation of average length of transmitted codeword.</caption></figure>
+
+          <para id="id4356827">Now recall from <link target-id="id4364104"/> that the entropy of the source data was 2.5524 bits/symbol and the simple fixed length 3-bit code in the earlier table, with a length of 3.00 which gave an efficiency of only 85.08%.</para>
+          <para id="id4356831">The efficiency of the Huffman coded data with its variable length codewords is therefore 2.5524/2.62 = 97.7% which is a much more acceptable result. </para>
+          <para id="id4269422">If the symbol probabilities all have values 1/(<m:math>
+              <m:ci> 
+                <m:msup> 
+                   <m:cn>2</m:cn> 
+                   <m:ci>n</m:ci> 
+                </m:msup> 
+              </m:ci> 
+        </m:math>) which are integer powers of 2 then Huffmann coding will result in 100% efficiency.</para>
+        </section>
+
+<note id="id3832436">This module has been created from lecture notes originated by P M Grant and D G M Cruickshank which are published in I A Glover and P M Grant, "Digital Communications", Pearson Education, 2009, ISBN 978-0-273-71830-7.  Powerpoint slides plus end of chapter problem examples/solutions are available for instructor use via password access at http://www.see.ed.ac.uk/~pmg/DIGICOMMS/</note>
+
+    </section>
+  </content>
+</document>

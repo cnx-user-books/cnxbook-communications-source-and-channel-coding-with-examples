@@ -1,0 +1,155 @@
+<document xmlns="http://cnx.rice.edu/cnxml" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:md="http://cnx.rice.edu/mdml">
+  <title>Block FECC coding</title>
+  <metadata>
+  <md:content-id>m18174</md:content-id><md:title>Block FECC coding</md:title>
+  <md:abstract>Inroduces the concept of forward error correcting codes and in particular those based on block coding techniques.
+Includes partiy check equations and the parity check matrix.</md:abstract>
+  <md:uuid>fcbfff8d-6c0f-4408-a8d2-87a5b15f2164</md:uuid>
+</metadata>
+  <content>
+    <section id="id6177106">
+      <title>Block FECC coding</title>
+      <section id="id6175763">
+        <title>Forward error correcting coding (FECC)</title>
+        <para id="id6207278">Block codes are one example of the forward error correcting coding (FECC) technique where we encode the signal by adding additional bits or digits of redundant data so that the decoder is then able to correct most of the errors which are introduced by transmission through a noisy channel. FECC was invented for deep space probes where the extremely long transmission propagation path loss results in received data with particularly low signal to noise ratio as the modest transmitter power is limited by the solar panel outputs. </para>
+        <para id="id6235426">As we are adding additional bits to generate each codeword this is a systematic encoder as the information data bits are included directly within the codewords.  The additional bits required for the transmission of the redundant information increases the data rate which will consume more bandwidth if we wish to maintain the same throughput, but, if we seek to obtain low error rates, then this trade-off is usually acceptable. </para>
+
+        <figure id="id6175573"><media id="id1166658576087" alt=""><image src="../../media/figa-e947.png" mime-type="image/png"/></media><caption>Error probability against received noise level for FECC and uncoded data transmissions</caption></figure>
+
+        <para id="id6175576"><link target-id="id6175573"/> shows the typical error rate performance for uncoded data compared with FECC data. It plots the bit error probability, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+, against <m:math>
+<m:apply><m:divide/> 
+    
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>E</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>N</m:ci> 
+                   <m:cn>0</m:cn> 
+                </m:msub> 
+              </m:ci> 
+
+   </m:apply> 
+        </m:math>
+. <m:math>
+<m:apply><m:divide/> 
+    
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>E</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>N</m:ci> 
+                   <m:cn>0</m:cn> 
+                </m:msub> 
+              </m:ci> 
+
+   </m:apply> 
+        </m:math>
+ is the measure of the energy per bit to the noise power spectral density ratio and is the normally used signal to noise ratio ratio measure on these error rate plots. </para>
+        <para id="id6176289">FECC is used widely in compact discs (CD), computer storage and data transmission, all manor of radio links, data modems, video, TV and cellphone transmissions, space communications etc. Note in <link target-id="id6175573"/> the ability of FECC to achieve a much lower error rate than for the uncoded data transmissions at low bit error probability, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:ci>b</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+. </para>
+      </section>
+      <section id="id7544857">
+        <title>ASCII coding</title>
+        <para id="id6211439">In some computer communication systems, information is sent as 7-bit ASCII codes with a parity check bit added on the end. Using even parity the 7-bit all zero ASCII code 0000000 expands into 00000000 while 0000001 codes to 00000011. This (and all other cases) thus has a binary digit difference or Hamming Distance of 2. <link target-id="id6123455"/> shows that we can use this to detect 1 (or an odd number of) errors. </para>
+
+        <figure id="id6123455"><media id="id1166658593925" alt=""><image src="../../media/figc-3fce.png" mime-type="image/png"/></media><caption>ASCII code example where received codeword has single error in the 5th bit position</caption></figure>
+
+        
+
+        <para id="id6123459">The block length is then n = 8 and the number of information bits k = 7. This generally assists with error detection but is is insufficiently robust or redundant to achieve an error correction capability as the coding rate is only 7/8.</para>
+        <para id="id7242622">The minimum distance in binary digits between any two codewords is known as the minimum Hamming Distance, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>D</m:ci> 
+                   <m:ci>min</m:ci> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+, which is 2 for the case of odd or even parity check in ASCII data transmission. We can then calculate the error detecting and correcting power of a code from the minimum distance in bits between error free blocks or codewords, see error correction capability module.</para>
+        <para id="id7647175">Although we shall look exclusively at coding schemes for binary systems, error correcting and detecting coding is not confined to binary digits. For example the ISBN numbers used on books have a checksum appended to them and these are calculated via modulo 11 arithmetic.</para>
+      </section>
+      <section id="id6205730">
+        <title>Block code construction</title>
+        <para id="id6195130">Block codes collect or arrange incoming information carrying data into groups of k binary digits and add coding (i.e. parity) bits to increase the coded block length up to n bits, where n&gt;k. </para>
+
+        <figure id="id6214335"><media id="id1166658594010" alt=""><image src="../../media/figb-a211.png" mime-type="image/png"/></media><caption>Block coder with k information digits and appended parity check bits</caption></figure>
+
+        <para id="id6214339">The coding rate R is simply the ratio of data or information carrying bits to the overall block length, k/n. The number of parity check (redundant) bits is therefore n – k, <link target-id="id6124335"/>. This block code is usually described as a (n, k) code.</para>
+</section>
+
+        <section id="element-751"><title>Block code example</title>
+<para id="id6230403">Suppose we want to code k = 4 information bits into a n = 7 bit codeword, giving a coding rate of 4/7. Code design is performed by using finite field algebra to achieve linear codes.  We can achieve this (7, 4) block code using 3 input exclusive or (EX - OR) gates to form the three even parity check bits, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:cn>1</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>, 
+ <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:cn>2</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+ and <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>P</m:ci> 
+                   <m:cn>3</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>
+, from the 4 information carrying bits, <m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>I</m:ci> 
+                   <m:cn>1</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>...<m:math>
+              <m:ci> 
+                <m:msub> 
+                   <m:ci>I</m:ci> 
+                   <m:cn>4</m:cn> 
+                </m:msub> 
+              </m:ci> 
+        </m:math>, as shown in <link target-id="id6220364"/>.</para>
+
+        <figure id="id6220364"><media id="id1166658584998" alt=""><image src="../../media/figd-d21b.png" mime-type="image/png"/></media><caption>Logic gate representation for (n, k) block coder where k = 4 information bits and n = 7 encoded block length (i.e. (7, 4) coder)</caption></figure>
+
+        <para id="id6236418">This circuitry can be represented by the logic gates in <link target-id="id6220364"/> or written either as a set of parity check equations or the corrresponding parity check matrix H, as in <link target-id="id6236432"/>.</para>
+
+        <figure id="id6236432"><media id="id1166658585035" alt=""><image src="../../media/fige-7dcb.png" mime-type="image/png"/></media><caption>Parity check bit computation and corresponding H matrix representation for (7, 4) block encoder</caption></figure>
+
+        <para id="id6236436">Remember here that the “cross-in-the-circle” symbol indicates a bitwise exclusive-or (EX – OR) operation. This H matrix can also be used to directly generate codewords from the information bits via a closely related G matrix. </para>
+        <para id="id6236459">This is an example of a systematic code, where the data is included directly within the codeword. Convolutional FECC, see later module, is an example of a non-systematic coder where we do not explicitly include the information carrying data within the transmissions, although the transmitted coded data is derived from the information data.</para><note id="id1166658585066">This module has been created from lecture notes originated by P M Grant and D G M Cruickshank which are published in I A Glover and P M Grant, "Digital Communications", Pearson Education, 2009, ISBN 978-0-273-71830-7.  Powerpoint slides plus end of chapter problem examples/solutions are available for instructor use via password access at http://www.see.ed.ac.uk/~pmg/DIGICOMMS/</note>
+      </section>
+    </section>
+  </content>
+</document>
